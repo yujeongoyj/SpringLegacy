@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/security https://www.springframework.org/schema/security/spring-security.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <!-- Spring MVC 어노테이션 기반의 컨트롤러 지원을 활성화하는 설정이다-->
+    <mvc:annotation-driven/>
+
+
+    <!-- auto-config="true"로 설정된 security:http 요소는 Spring Security의
+    기본 보안 설정을 자동으로 구성하며,
+    use-expressions="true"는 접근 권한을 표현식으로 설정할 수 있도록 한다. -->
+    <security:http auto-config="true" use-expressions="true">
+        <security:intercept-url pattern="/" access="permitAll()"/>
+        <security:intercept-url pattern="*.ico" access="permitAll()"/>
+        <security:intercept-url pattern="/resource/**" access="permitAll()"/>
+        <security:intercept-url pattern="/board/showAll" access="isAuthenticated()"/>
+        <security:form-login
+                login-page="/"
+                login-processing-url="/user/auth"
+                username-parameter="username"
+                password-parameter="password"
+                authentication-success-forward-url="/board/showAll"
+                authentication-failure-forward-url="/"
+
+        />
+        <security:logout
+                logout-url="/logout"
+                logout-success-url="/"
+        />
+
+    </security:http>
+
+    <!--인증 관리자를 설정하고 인증 제공자를 정의한다.  -->
+    <security:authentication-manager>
+        <security:authentication-provider>
+            <security:user-service>
+                <security:user name="admin" authorities="ROLE_ADMIN" password="{noop}1234"/>
+                <security:user name="a" authorities="ROLE_USER" password="{noop}a"/>
+            </security:user-service>
+        </security:authentication-provider>
+    </security:authentication-manager>
+</beans>

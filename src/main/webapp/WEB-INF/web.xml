@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+
+
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd" version="6.0" metadata-complete="true">
+  <context-param>
+    <!--
+    만약 스프링에서 따로 관리해야하는 객체(aka 빈)을 등록해야 하는경우
+    application-context.xml에 등록하면 된다. 
+    -->
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+      /WEB-INF/spring/application-context.xml
+      /WEB-INF/spring/security-context.xml
+    </param-value>
+
+  </context-param>
+  <!--
+  위에서 지정한 설정 XML 파일을 객체화 시킬 때 사용할 클래스.
+  -->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  
+  <!--
+  Spring Framework에서 뷰에 대한 설정, 컨트롤러, 서비스 등의 패키지에 대한 설정을
+  모두 담은 디스패쳐을 설정하는 부분
+  -->
+  <servlet>
+    <servlet-name>dispatcher</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>/WEB-INF/spring/dispatcher-servlet.xml</param-value>
+    </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>dispatcher</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+  <session-config>
+    <session-timeout>3600</session-timeout>
+  </session-config>
+  <filter>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+</web-app>

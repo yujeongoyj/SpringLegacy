@@ -9,6 +9,7 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
+
 <div class="container-fluid">
     <div class="main h-100">
         <form action="/user/auth" method="post">
@@ -22,6 +23,14 @@
                 <div class="col-4">
                     <label for="password">비밀번호</label>
                     <input type="password" class="form-control" name="password" id="password">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-4">
+                    <input type="checkbox" class="form-check-input" value="True"
+                           name="remember-me" id="remember-me">
+                    <label class="form-check-label" for="remember-me">자동 로그인</label>
                 </div>
             </div>
             <div class="row justify-content-center">
